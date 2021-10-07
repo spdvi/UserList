@@ -39,8 +39,10 @@ public class MainForm extends javax.swing.JFrame {
         radGenderMale = new javax.swing.JRadioButton();
         radGenderFemale = new javax.swing.JRadioButton();
         btnInsert = new javax.swing.JButton();
+        chkIsAlive = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setFont(new java.awt.Font("Calibri", 0, 12)); // NOI18N
 
         txtUsers.setColumns(20);
         txtUsers.setRows(5);
@@ -75,6 +77,8 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
+        chkIsAlive.setText("Alive");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -96,7 +100,8 @@ public class MainForm extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(radGenderMale)
                                         .addGap(18, 18, 18)
-                                        .addComponent(radGenderFemale))))
+                                        .addComponent(radGenderFemale))
+                                    .addComponent(chkIsAlive, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(btnInsert))
                         .addGap(0, 337, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -114,10 +119,12 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(radGenderMale)
                     .addComponent(radGenderFemale))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtLastName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtLastName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(chkIsAlive))
                 .addGap(18, 18, 18)
                 .addComponent(btnInsert)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -127,11 +134,13 @@ public class MainForm extends javax.swing.JFrame {
 
     private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
         LocalDate birthDate = LocalDate.parse(txtBirthDate.getText());
-        boolean isMaleOrFemale = false;
+        String maleOrFemale;
         if (radGenderMale.isSelected()) {
-            isMaleOrFemale = true;
+            maleOrFemale = "Male";
         }
-        User newUser = new User(txtId.getText(), txtFirstName.getText(), txtLastName.getText(), birthDate, isMaleOrFemale);
+        else 
+            maleOrFemale = "Female";
+        User newUser = new User(txtId.getText(), txtFirstName.getText(), txtLastName.getText(), birthDate, maleOrFemale, chkIsAlive.isSelected());
         txtUsers.append(newUser.toString());
     }//GEN-LAST:event_btnInsertActionPerformed
 
@@ -174,6 +183,7 @@ public class MainForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnInsert;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JCheckBox chkIsAlive;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JRadioButton radGenderFemale;
     private javax.swing.JRadioButton radGenderMale;
