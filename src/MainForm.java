@@ -56,6 +56,8 @@ public class MainForm extends javax.swing.JFrame {
         btnSave = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtUsers = new javax.swing.JTextArea();
+        btnShowEncuestaDialog = new javax.swing.JButton();
+        btnShowEncuestaDialog2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("User Manager");
@@ -136,6 +138,20 @@ public class MainForm extends javax.swing.JFrame {
         txtUsers.setRows(5);
         jScrollPane1.setViewportView(txtUsers);
 
+        btnShowEncuestaDialog.setText("Encuesta");
+        btnShowEncuestaDialog.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnShowEncuestaDialogActionPerformed(evt);
+            }
+        });
+
+        btnShowEncuestaDialog2.setText("Encuesta2");
+        btnShowEncuestaDialog2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnShowEncuestaDialog2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -160,9 +176,13 @@ public class MainForm extends javax.swing.JFrame {
                                         .addComponent(radGenderFemale))
                                     .addComponent(chkIsAlive, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 173, Short.MAX_VALUE)
-                        .addComponent(btnLoad, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(btnLoad, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnShowEncuestaDialog, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnShowEncuestaDialog2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jScrollPane1))
                 .addContainerGap())
         );
@@ -172,12 +192,14 @@ public class MainForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtBirthDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtBirthDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnShowEncuestaDialog))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(radGenderMale)
-                    .addComponent(radGenderFemale))
+                    .addComponent(radGenderFemale)
+                    .addComponent(btnShowEncuestaDialog2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtLastName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -188,7 +210,7 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(btnLoad)
                     .addComponent(btnSave))
                 .addGap(84, 84, 84)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -196,21 +218,32 @@ public class MainForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
-        LocalDate birthDate = LocalDate.parse(txtBirthDate.getText());
-        String maleOrFemale;
-        if (radGenderMale.isSelected()) {
-            maleOrFemale = "Male";
+        
+        LocalDate birthDate = LocalDate.now();
+        try {
+            birthDate = LocalDate.parse(txtBirthDate.getText());
+            
+            String maleOrFemale;
+            if (radGenderMale.isSelected()) {
+                maleOrFemale = "Male";
+            }
+            else 
+                maleOrFemale = "Female";
+            User newUser = new User(txtId.getText(), txtFirstName.getText(), txtLastName.getText(), birthDate, maleOrFemale, chkIsAlive.isSelected());
+            users.add(newUser);
+
+    //        for (User u: users) {
+    //            u.
+    //        }
+
+            txtUsers.append(newUser.toString());
         }
-        else 
-            maleOrFemale = "Female";
-        User newUser = new User(txtId.getText(), txtFirstName.getText(), txtLastName.getText(), birthDate, maleOrFemale, chkIsAlive.isSelected());
-        users.add(newUser);
-        
-//        for (User u: users) {
-//            u.
-//        }
-        
-        txtUsers.append(newUser.toString());
+        catch (Exception ex) {
+            EncuestaDialog encuesta = new EncuestaDialog(this, true);
+            encuesta.getLblMessage().setText(ex.getMessage());
+            encuesta.setVisible(true);
+        }
+
     }//GEN-LAST:event_btnInsertActionPerformed
 
     private void txtIdFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIdFocusGained
@@ -292,6 +325,17 @@ public class MainForm extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnLoadActionPerformed
 
+    private void btnShowEncuestaDialogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowEncuestaDialogActionPerformed
+        EncuestaDialog encuesta = new EncuestaDialog(this, false);
+        encuesta.getLblMessage().setText("Missatge des de el MainForm");
+        encuesta.setVisible(true);
+    }//GEN-LAST:event_btnShowEncuestaDialogActionPerformed
+
+    private void btnShowEncuestaDialog2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowEncuestaDialog2ActionPerformed
+        EncuestaDialog encuesta2 = new EncuestaDialog(this, false);
+        encuesta2.setVisible(true);
+    }//GEN-LAST:event_btnShowEncuestaDialog2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -332,6 +376,8 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JButton btnInsert;
     private javax.swing.JButton btnLoad;
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnShowEncuestaDialog;
+    private javax.swing.JButton btnShowEncuestaDialog2;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox chkIsAlive;
     private javax.swing.JScrollPane jScrollPane1;

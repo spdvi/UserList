@@ -59,9 +59,15 @@
                           </Group>
                       </Group>
                       <EmptySpace pref="173" max="32767" attributes="0"/>
-                      <Component id="btnLoad" min="-2" pref="73" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="btnSave" min="-2" pref="73" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="btnLoad" min="-2" pref="73" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="btnSave" min="-2" pref="73" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="btnShowEncuestaDialog" alignment="1" min="-2" pref="95" max="-2" attributes="0"/>
+                          <Component id="btnShowEncuestaDialog2" alignment="1" min="-2" pref="95" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
                   <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
               </Group>
@@ -76,12 +82,14 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="txtId" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtBirthDate" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnShowEncuestaDialog" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="txtFirstName" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="radGenderMale" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="radGenderFemale" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnShowEncuestaDialog2" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -95,7 +103,7 @@
                   <Component id="btnSave" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="84" max="-2" attributes="0"/>
-              <Component id="jScrollPane1" pref="258" max="32767" attributes="0"/>
+              <Component id="jScrollPane1" pref="252" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -217,5 +225,21 @@
         </Component>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JButton" name="btnShowEncuestaDialog">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Encuesta"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnShowEncuestaDialogActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnShowEncuestaDialog2">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Encuesta2"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnShowEncuestaDialog2ActionPerformed"/>
+      </Events>
+    </Component>
   </SubComponents>
 </Form>
