@@ -14,6 +14,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import javax.swing.DefaultListModel;
+import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
 
 /*
@@ -68,6 +70,12 @@ public class MainForm extends javax.swing.JFrame {
         txtUsers = new javax.swing.JTextArea();
         btnShowEncuestaDialog = new javax.swing.JButton();
         btnShowEncuestaDialog2 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        lstUsers = new javax.swing.JList<>();
+        lblList = new javax.swing.JLabel();
+        btnGetSelectedItem = new javax.swing.JButton();
+        btnLoadIntoList = new javax.swing.JButton();
+        btnDeleteSelected = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("User Manager");
@@ -103,7 +111,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
-        txtBirthDate.setText("BirthDate");
+        txtBirthDate.setText("2000-01-01");
         txtBirthDate.setNextFocusableComponent(chkIsAlive);
         txtBirthDate.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -162,6 +170,41 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
+        lstUsers.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Lunes", "Martes", "Miercoles", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        lstUsers.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstUsersValueChanged(evt);
+            }
+        });
+        jScrollPane2.setViewportView(lstUsers);
+
+        lblList.setText("jLabel1");
+
+        btnGetSelectedItem.setText("Get selected Item");
+        btnGetSelectedItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGetSelectedItemActionPerformed(evt);
+            }
+        });
+
+        btnLoadIntoList.setText("Load");
+        btnLoadIntoList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoadIntoListActionPerformed(evt);
+            }
+        });
+
+        btnDeleteSelected.setText("Delete");
+        btnDeleteSelected.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteSelectedActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -185,15 +228,30 @@ public class MainForm extends javax.swing.JFrame {
                                         .addGap(18, 18, 18)
                                         .addComponent(radGenderFemale))
                                     .addComponent(chkIsAlive, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 173, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(btnLoad, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(btnShowEncuestaDialog, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnShowEncuestaDialog2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(31, 31, 31)
+                                .addComponent(jScrollPane2))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 114, Short.MAX_VALUE)
+                                .addComponent(btnGetSelectedItem)
+                                .addGap(53, 53, 53)
+                                .addComponent(lblList, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(234, 234, 234)
+                        .addComponent(btnLoad, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnLoadIntoList, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(110, 110, 110)
+                        .addComponent(btnDeleteSelected, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -215,12 +273,23 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(txtLastName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(chkIsAlive))
                 .addGap(18, 18, 18)
+                .addComponent(btnInsert)
+                .addGap(50, 50, 50)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnInsert)
                     .addComponent(btnLoad)
-                    .addComponent(btnSave))
-                .addGap(84, 84, 84)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
+                    .addComponent(btnSave)
+                    .addComponent(btnLoadIntoList)
+                    .addComponent(btnDeleteSelected))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblList)
+                            .addComponent(btnGetSelectedItem))
+                        .addGap(0, 22, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -332,6 +401,14 @@ public class MainForm extends javax.swing.JFrame {
             ioe.printStackTrace();
         }
 
+        
+        DefaultListModel<User> usersListModel = new DefaultListModel<User>();
+        for (User u: users) {
+            usersListModel.addElement(u);
+        }
+//        lstUsers.setModel(usersListModel);
+        
+        
         for (User u: users) {
             txtUsers.append(u.toString());
         }
@@ -352,6 +429,60 @@ public class MainForm extends javax.swing.JFrame {
         EncuestaDialog encuesta2 = new EncuestaDialog(this, false);
         encuesta2.setVisible(true);
     }//GEN-LAST:event_btnShowEncuestaDialog2ActionPerformed
+
+    private void btnGetSelectedItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGetSelectedItemActionPerformed
+        lblList.setText( lstUsers.getSelectedValue() );
+    }//GEN-LAST:event_btnGetSelectedItemActionPerformed
+
+    private void lstUsersValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstUsersValueChanged
+        lblList.setText( lstUsers.getSelectedValue() );
+    }//GEN-LAST:event_lstUsersValueChanged
+
+    private void btnLoadIntoListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadIntoListActionPerformed
+        try {
+            users.clear();
+            BufferedReader reader = new BufferedReader(new FileReader(fileName));
+            String currentLine = reader.readLine();
+            while (currentLine != null) {
+                String[] fields = currentLine.split(",");
+                User user = new User(fields[0], fields[2], fields[1],
+                        LocalDate.parse(fields[3]), fields[4],
+                        fields[5].equals("Alive")); 
+//                boolean isAlive;
+//                if (fields[5].equals("Alive"))
+//                    isAlive = true;
+//                else
+//                    isAlive = false;
+                
+                users.add(user);
+                currentLine = reader.readLine();
+            }
+            
+        }
+        catch(FileNotFoundException fnfe) {
+            fnfe.printStackTrace();
+        }
+        catch(IOException ioe) {
+            ioe.printStackTrace();
+        }
+        
+        DefaultListModel usersListModel = new DefaultListModel();
+        
+        for(User u: users) {
+            usersListModel.addElement(u.toString());
+        }
+        
+        lstUsers.setModel(usersListModel);
+    }//GEN-LAST:event_btnLoadIntoListActionPerformed
+
+    private void btnDeleteSelectedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteSelectedActionPerformed
+        String selectedUser = lstUsers.getSelectedValue();
+        int lastIndex = selectedUser.indexOf(":");
+        int selectedUserId = Integer.parseInt( selectedUser.substring(0, lastIndex-1) );
+        
+        // TODO: Buscar en la lista users el objeto User que tiene como Id == selectedUserId y eliminarlo de la lista
+        
+    }//GEN-LAST:event_btnDeleteSelectedActionPerformed
 
     /**
      * @param args the command line arguments
@@ -390,14 +521,20 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDeleteSelected;
+    private javax.swing.JButton btnGetSelectedItem;
     private javax.swing.JButton btnInsert;
     private javax.swing.JButton btnLoad;
+    private javax.swing.JButton btnLoadIntoList;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnShowEncuestaDialog;
     private javax.swing.JButton btnShowEncuestaDialog2;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox chkIsAlive;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblList;
+    private javax.swing.JList<String> lstUsers;
     private javax.swing.JRadioButton radGenderFemale;
     private javax.swing.JRadioButton radGenderMale;
     private javax.swing.JTextField txtBirthDate;
