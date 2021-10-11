@@ -10,6 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -272,9 +273,10 @@ public class MainForm extends javax.swing.JFrame {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
             for(User u: users) {
+                String formattedDate = u.getBirthDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 String userString = u.getId() + "," + u.getLastName() + ","
                         + u.getFirstName() + ","
-                        + u.getBirthDate().getYear() + "-" + u.getBirthDate().getMonthValue() + "-" + u.getBirthDate().getDayOfMonth()
+                        + formattedDate
                         + "," + u.getGender() + "," + (u.isIsAlive() ? "Alive" : "Dead") 
                         + System.lineSeparator();
                 writer.append(userString);
