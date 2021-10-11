@@ -77,8 +77,8 @@ public class User {
         StringBuilder strUser = new StringBuilder();
         strUser.append(this.id + ": " + this.lastName + ", " + this.firstName + " - ");
         int age = LocalDateTime.now().getYear() - this.birthDate.getYear();
-        strUser.append(age + " years old - ");
-        String alive = this.isAlive ? alive = "Alive" : "Dead";
+        strUser.append(age + " years old - " + this.gender);
+        String alive = this.isAlive ? alive = ", Alive" : ", Dead";
         strUser.append(alive);
         strUser.append(System.lineSeparator());
         return strUser.toString();

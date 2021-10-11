@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import javax.swing.SwingUtilities;
 
 /*
@@ -42,8 +44,6 @@ public class MainForm extends javax.swing.JFrame {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        txtUsers = new javax.swing.JTextArea();
         txtId = new javax.swing.JTextField();
         txtFirstName = new javax.swing.JTextField();
         txtLastName = new javax.swing.JTextField();
@@ -54,6 +54,8 @@ public class MainForm extends javax.swing.JFrame {
         chkIsAlive = new javax.swing.JCheckBox();
         btnLoad = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtUsers = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("User Manager");
@@ -63,11 +65,6 @@ public class MainForm extends javax.swing.JFrame {
                 formWindowOpened(evt);
             }
         });
-
-        txtUsers.setColumns(20);
-        txtUsers.setRows(5);
-        txtUsers.setFocusable(false);
-        jScrollPane1.setViewportView(txtUsers);
 
         txtId.setText("Id");
         txtId.setName(""); // NOI18N
@@ -135,6 +132,10 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
+        txtUsers.setColumns(20);
+        txtUsers.setRows(5);
+        jScrollPane1.setViewportView(txtUsers);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -142,7 +143,6 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(btnInsert)
@@ -162,7 +162,8 @@ public class MainForm extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 173, Short.MAX_VALUE)
                         .addComponent(btnLoad, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -186,9 +187,9 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(btnInsert)
                     .addComponent(btnLoad)
                     .addComponent(btnSave))
-                .addGap(114, 114, 114)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(84, 84, 84)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -237,7 +238,14 @@ public class MainForm extends javax.swing.JFrame {
 
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
-            writer.append(txtUsers.getText());
+            for(User u: users) {
+                String userString = u.getId() + "," + u.getLastName() + ","
+                        + u.getFirstName() + ","
+                        + u.getBirthDate().getYear() + "-" + u.getBirthDate().getMonthValue() + "-" + u.getBirthDate().getDayOfMonth()
+                        + "," + u.getGender() + "," + (u.isIsAlive() ? "Alive" : "Dead") 
+                        + System.lineSeparator();
+                writer.append(userString);
+            }
             writer.close();
         }
         catch(IOException ioe) {
@@ -248,12 +256,24 @@ public class MainForm extends javax.swing.JFrame {
     private void btnLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadActionPerformed
         
         try {
+            users.clear();
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
             String currentLine = reader.readLine();
             while (currentLine != null) {
-                txtUsers.append(currentLine + System.lineSeparator());
+                String[] fields = currentLine.split(",");
+                User user = new User(fields[0], fields[2], fields[1],
+                        LocalDate.parse(fields[3]), fields[4],
+                        fields[5].equals("Alive")); 
+//                boolean isAlive;
+//                if (fields[5].equals("Alive"))
+//                    isAlive = true;
+//                else
+//                    isAlive = false;
+                
+                users.add(user);
                 currentLine = reader.readLine();
             }
+            
         }
         catch(FileNotFoundException fnfe) {
             fnfe.printStackTrace();
@@ -262,6 +282,14 @@ public class MainForm extends javax.swing.JFrame {
             ioe.printStackTrace();
         }
 
+        for (User u: users) {
+            txtUsers.append(u.toString());
+        }
+        
+//        for (int i = 0; i < users.size(); i++) {
+//            txtUsers.append(users.get(i).toString());
+//        }
+        
     }//GEN-LAST:event_btnLoadActionPerformed
 
     /**

@@ -1,6 +1,8 @@
-1,Garcia,Mike,1978-10-01,Alive
-2,Fiol,Joan,2000-03-20,Alive
-3,Bel,Aina,1940-01-01,Dead
-7,Talens,Alba,1997-06-25,Alive
-5,Arvin,John,1958-10-30,Dead
-8,Malig,Jana,2010-06-05,Alive
+1,Garcia,Mike,1978-10-1,Male,Alive
+2,Fiol,Joan,2000-3-20,Male,Alive
+3,Bel,Aina,1940-1-1,Female,Dead
+7,Talens,Alba,1997-6-25,Female,Alive
+5,Arvin,John,1958-10-30,Male,Dead
+8,Malig,Jana,2010-6-5,Female,Alive
+9,Ram,Rafa,1998-2-20,Male,Alive
+10,Lan,Joana,1997-8-4,Female,Alive
