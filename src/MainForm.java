@@ -1,6 +1,17 @@
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
+import javax.swing.SwingUtilities;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -12,7 +23,8 @@ import java.time.Month;
  * @author DevMike
  */
 public class MainForm extends javax.swing.JFrame {
-
+    final static String fileName = "src/users.txt";
+    ArrayList<User> users = new ArrayList<User>();
     /**
      * Creates new form MainFrame
      */
@@ -40,26 +52,55 @@ public class MainForm extends javax.swing.JFrame {
         radGenderFemale = new javax.swing.JRadioButton();
         btnInsert = new javax.swing.JButton();
         chkIsAlive = new javax.swing.JCheckBox();
+        btnLoad = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("User Manager");
         setFont(new java.awt.Font("Calibri", 0, 12)); // NOI18N
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         txtUsers.setColumns(20);
         txtUsers.setRows(5);
+        txtUsers.setFocusable(false);
         jScrollPane1.setViewportView(txtUsers);
 
         txtId.setText("Id");
         txtId.setName(""); // NOI18N
         txtId.setNextFocusableComponent(txtFirstName);
+        txtId.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtIdFocusGained(evt);
+            }
+        });
 
         txtFirstName.setText("FirstName");
         txtFirstName.setNextFocusableComponent(txtLastName);
+        txtFirstName.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtFirstNameFocusGained(evt);
+            }
+        });
 
         txtLastName.setText("LastName");
         txtLastName.setNextFocusableComponent(txtBirthDate);
+        txtLastName.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtLastNameFocusGained(evt);
+            }
+        });
 
         txtBirthDate.setText("BirthDate");
-        txtBirthDate.setNextFocusableComponent(radGenderMale);
+        txtBirthDate.setNextFocusableComponent(chkIsAlive);
+        txtBirthDate.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtBirthDateFocusGained(evt);
+            }
+        });
 
         buttonGroup1.add(radGenderMale);
         radGenderMale.setSelected(true);
@@ -78,6 +119,21 @@ public class MainForm extends javax.swing.JFrame {
         });
 
         chkIsAlive.setText("Alive");
+        chkIsAlive.setNextFocusableComponent(btnInsert);
+
+        btnLoad.setText("Load");
+        btnLoad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoadActionPerformed(evt);
+            }
+        });
+
+        btnSave.setText("Save");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -88,7 +144,8 @@ public class MainForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnInsert)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -101,9 +158,11 @@ public class MainForm extends javax.swing.JFrame {
                                         .addComponent(radGenderMale)
                                         .addGap(18, 18, 18)
                                         .addComponent(radGenderFemale))
-                                    .addComponent(chkIsAlive, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(btnInsert))
-                        .addGap(0, 337, Short.MAX_VALUE)))
+                                    .addComponent(chkIsAlive, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 173, Short.MAX_VALUE)
+                        .addComponent(btnLoad, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -123,10 +182,13 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(txtLastName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(chkIsAlive))
                 .addGap(18, 18, 18)
-                .addComponent(btnInsert)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnInsert)
+                    .addComponent(btnLoad)
+                    .addComponent(btnSave))
+                .addGap(114, 114, 114)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -141,8 +203,66 @@ public class MainForm extends javax.swing.JFrame {
         else 
             maleOrFemale = "Female";
         User newUser = new User(txtId.getText(), txtFirstName.getText(), txtLastName.getText(), birthDate, maleOrFemale, chkIsAlive.isSelected());
+        users.add(newUser);
+        
+//        for (User u: users) {
+//            u.
+//        }
+        
         txtUsers.append(newUser.toString());
     }//GEN-LAST:event_btnInsertActionPerformed
+
+    private void txtIdFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIdFocusGained
+        // TODO add your handling code here:
+        txtId.selectAll();
+    }//GEN-LAST:event_txtIdFocusGained
+
+    private void txtFirstNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtFirstNameFocusGained
+        txtFirstName.selectAll();
+    }//GEN-LAST:event_txtFirstNameFocusGained
+
+    private void txtLastNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLastNameFocusGained
+        txtLastName.selectAll();
+    }//GEN-LAST:event_txtLastNameFocusGained
+
+    private void txtBirthDateFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBirthDateFocusGained
+        txtBirthDate.selectAll();
+    }//GEN-LAST:event_txtBirthDateFocusGained
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        SwingUtilities.getRootPane(this).setDefaultButton(btnInsert);
+    }//GEN-LAST:event_formWindowOpened
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+            writer.append(txtUsers.getText());
+            writer.close();
+        }
+        catch(IOException ioe) {
+            System.out.println(ioe.getMessage());
+        }
+    }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadActionPerformed
+        
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(fileName));
+            String currentLine = reader.readLine();
+            while (currentLine != null) {
+                txtUsers.append(currentLine + System.lineSeparator());
+                currentLine = reader.readLine();
+            }
+        }
+        catch(FileNotFoundException fnfe) {
+            fnfe.printStackTrace();
+        }
+        catch(IOException ioe) {
+            ioe.printStackTrace();
+        }
+
+    }//GEN-LAST:event_btnLoadActionPerformed
 
     /**
      * @param args the command line arguments
@@ -182,6 +302,8 @@ public class MainForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnInsert;
+    private javax.swing.JButton btnLoad;
+    private javax.swing.JButton btnSave;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox chkIsAlive;
     private javax.swing.JScrollPane jScrollPane1;

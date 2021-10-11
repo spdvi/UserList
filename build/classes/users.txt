@@ -1,0 +1,6 @@
+1,Garcia,Mike,1978-10-01,Alive
+2,Fiol,Joan,2000-03-20,Alive
+3,Bel,Aina,1940-01-01,Dead
+7,Talens,Alba,1997-06-25,Alive
+5,Arvin,John,1958-10-30,Dead
+8,Malig,Jana,2010-06-05,Alive
