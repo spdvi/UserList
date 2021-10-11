@@ -28,6 +28,15 @@ import javax.swing.SwingUtilities;
 public class MainForm extends javax.swing.JFrame {
     final static String fileName = "src/users.txt";
     ArrayList<User> users = new ArrayList<User>();
+
+    public boolean isConfirmSave() {
+        return confirmSave;
+    }
+
+    public void setConfirmSave(boolean confirmSave) {
+        this.confirmSave = confirmSave;
+    }
+    private boolean confirmSave = false;
     /**
      * Creates new form MainFrame
      */
@@ -270,22 +279,28 @@ public class MainForm extends javax.swing.JFrame {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
 
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
-            for(User u: users) {
-                String formattedDate = u.getBirthDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                String userString = u.getId() + "," + u.getLastName() + ","
-                        + u.getFirstName() + ","
-                        + formattedDate
-                        + "," + u.getGender() + "," + (u.isIsAlive() ? "Alive" : "Dead") 
-                        + System.lineSeparator();
-                writer.append(userString);
+        ConfirmSaveDialog saveDialog = new ConfirmSaveDialog(this, true);
+        saveDialog.setVisible(true);
+        
+        if (this.confirmSave) {
+            try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+                for(User u: users) {
+                    String formattedDate = u.getBirthDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    String userString = u.getId() + "," + u.getLastName() + ","
+                            + u.getFirstName() + ","
+                            + formattedDate
+                            + "," + u.getGender() + "," + (u.isIsAlive() ? "Alive" : "Dead") 
+                            + System.lineSeparator();
+                    writer.append(userString);
+                }
+                writer.close();
             }
-            writer.close();
+            catch(IOException ioe) {
+                System.out.println(ioe.getMessage());
+            }
         }
-        catch(IOException ioe) {
-            System.out.println(ioe.getMessage());
-        }
+        
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadActionPerformed
