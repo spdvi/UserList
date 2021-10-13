@@ -33,15 +33,9 @@ import javax.swing.SwingUtilities;
 public class MainForm extends javax.swing.JFrame {
     final static String fileName = "src/spdvi/users.txt";
     ArrayList<User> users = new ArrayList<User>();
-    
-    public boolean isConfirmSave() {
-        return confirmSave;
-    }
-
-    public void setConfirmSave(boolean confirmSave) {
-        this.confirmSave = confirmSave;
-    }
     private boolean confirmSave = false;
+    private boolean dataChanged = false;
+    
     /**
      * Creates new form MainFrame
      */
@@ -49,6 +43,14 @@ public class MainForm extends javax.swing.JFrame {
         initComponents();
     }
 
+    public boolean isConfirmSave() {
+        return confirmSave;
+    }
+
+    public void setConfirmSave(boolean confirmSave) {
+        this.confirmSave = confirmSave;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -79,6 +81,12 @@ public class MainForm extends javax.swing.JFrame {
         setFont(new java.awt.Font("Calibri", 0, 12)); // NOI18N
         setLocation(new java.awt.Point(400, 300));
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
@@ -136,7 +144,6 @@ public class MainForm extends javax.swing.JFrame {
         chkIsAlive.setText("Alive");
         chkIsAlive.setNextFocusableComponent(btnInsert);
 
-        lstUsers.setModel(new DefaultListModel());
         lstUsers.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 lstUsersValueChanged(evt);
@@ -215,8 +222,8 @@ public class MainForm extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(78, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtBirthDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -240,7 +247,7 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(btnSaveListToFile))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -260,19 +267,15 @@ public class MainForm extends javax.swing.JFrame {
                 maleOrFemale = "Female";
             User newUser = new User(txtId.getText(), txtFirstName.getText(), txtLastName.getText(), birthDate, maleOrFemale, chkIsAlive.isSelected());
             users.add(newUser);
-
-    //        for (User u: users) {
-    //            u.
-    //        }
-
-//            txtUsers.append(newUser.toString());
+            
+            UpdateUserListView();
+            dataChanged = true;
         }
         catch (Exception ex) {
             EncuestaDialog encuesta = new EncuestaDialog(this, true);
             encuesta.getLblMessage().setText(ex.getMessage());
             encuesta.setVisible(true);
         }
-
     }//GEN-LAST:event_btnInsertActionPerformed
 
     private void txtIdFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIdFocusGained
@@ -294,6 +297,27 @@ public class MainForm extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         SwingUtilities.getRootPane(this).setDefaultButton(btnInsert);
+        
+        try {
+            users.clear();
+            BufferedReader reader = new BufferedReader(new FileReader(fileName));
+            String currentLine = reader.readLine();
+            while (currentLine != null) {
+                String[] fields = currentLine.split(",");
+                User user = new User(fields[0], fields[2], fields[1],
+                        LocalDate.parse(fields[3]), fields[4],
+                        fields[5].equals("Alive"));                 
+                users.add(user);
+                currentLine = reader.readLine();
+            }
+            UpdateUserListView();
+        }
+        catch(FileNotFoundException fnfe) {
+            fnfe.printStackTrace();
+        }
+        catch(IOException ioe) {
+            ioe.printStackTrace();
+        }
     }//GEN-LAST:event_formWindowOpened
 
     private void lstUsersValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstUsersValueChanged
@@ -337,16 +361,12 @@ public class MainForm extends javax.swing.JFrame {
                 User user = new User(fields[0], fields[2], fields[1],
                         LocalDate.parse(fields[3]), fields[4],
                         fields[5].equals("Alive")); 
-//                boolean isAlive;
-//                if (fields[5].equals("Alive"))
-//                    isAlive = true;
-//                else
-//                    isAlive = false;
-                
+               
                 users.add(user);
                 currentLine = reader.readLine();
             }
-            
+            reader.close();
+            UpdateUserListView();
         }
         catch(FileNotFoundException fnfe) {
             fnfe.printStackTrace();
@@ -355,7 +375,6 @@ public class MainForm extends javax.swing.JFrame {
             ioe.printStackTrace();
         }
         
-        UpdateUserListView();
     }//GEN-LAST:event_btnLoadIntoListActionPerformed
 
     private void btnDeleteSelectedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteSelectedActionPerformed
@@ -380,8 +399,8 @@ public class MainForm extends javax.swing.JFrame {
         }
         
 //        DefaultListModel usersListModel = (DefaultListModel)lstUsers.getModel();
-//        usersListModel.clear();
         UpdateUserListView();
+        dataChanged = true;
     }//GEN-LAST:event_btnDeleteSelectedActionPerformed
 
     private void btnSaveListToFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveListToFileActionPerformed
@@ -389,22 +408,8 @@ public class MainForm extends javax.swing.JFrame {
         saveDialog.setVisible(true);
         
         if (this.confirmSave) {
-            try {
-                BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
-                for(User u: users) {
-                    String formattedDate = u.getBirthDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                    String userString = u.getId() + "," + u.getLastName() + ","
-                            + u.getFirstName() + ","
-                            + formattedDate
-                            + "," + u.getGender() + "," + (u.isIsAlive() ? "Alive" : "Dead") 
-                            + System.lineSeparator();
-                    writer.append(userString);
-                }
-                writer.close();
-            }
-            catch(IOException ioe) {
-                System.out.println(ioe.getMessage());
-            }
+            SaveToFile();
+            dataChanged = false;
         }
     }//GEN-LAST:event_btnSaveListToFileActionPerformed
 
@@ -418,9 +423,24 @@ public class MainForm extends javax.swing.JFrame {
                 u.setGender(radGenderMale.isSelected() ? "Male" : "Female");
                 u.setIsAlive(chkIsAlive.isSelected());
                 UpdateUserListView();
+                dataChanged = true;
             }
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        
+    }//GEN-LAST:event_formWindowClosed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        
+        if (dataChanged) {
+            ConfirmSaveDialog saveDialog = new ConfirmSaveDialog(this, true);
+            saveDialog.setVisible(true);
+            if (confirmSave)
+                SaveToFile();
+        }
+    }//GEN-LAST:event_formWindowClosing
 
     private void UpdateUserListView() {
         //usersListModel = (DefaultListModel)lstUsers.getModel();
@@ -435,8 +455,28 @@ public class MainForm extends javax.swing.JFrame {
         for(User u: users) {
             usersListModel.addElement(u.toString());
         }
-        lstUsers.setModel(usersListModel);
-       
+        lstUsers.setModel(usersListModel);      
+    }
+    
+    private void SaveToFile() {
+        
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+            for(User u: users) {
+                String formattedDate = u.getBirthDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                String userString = u.getId() + "," + u.getLastName() + ","
+                        + u.getFirstName() + ","
+                        + formattedDate
+                        + "," + u.getGender() + "," + (u.isIsAlive() ? "Alive" : "Dead") 
+                        + System.lineSeparator();
+                writer.append(userString);
+            }
+            writer.close();
+        }
+        catch(IOException ioe) {
+            System.out.println(ioe.getMessage());
+        }
+                
     }
     
     /**
@@ -492,6 +532,5 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtLastName;
     // End of variables declaration//GEN-END:variables
-
 
 }
