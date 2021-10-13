@@ -510,12 +510,7 @@ public class MainForm extends javax.swing.JFrame {
             ioe.printStackTrace();
         }
         
-//        UpdateUserListView();
-        DefaultListModel usersListModel = new DefaultListModel();
-        for(User u: users) {
-            usersListModel.addElement(u.toString());
-        }
-        lstUsers.setModel(usersListModel);
+        UpdateUserListView();
     }//GEN-LAST:event_btnLoadIntoListActionPerformed
 
     private void btnDeleteSelectedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteSelectedActionPerformed
@@ -541,11 +536,7 @@ public class MainForm extends javax.swing.JFrame {
         
 //        DefaultListModel usersListModel = (DefaultListModel)lstUsers.getModel();
 //        usersListModel.clear();
-        DefaultListModel usersListModel = new DefaultListModel();
-        for(User u: users) {
-            usersListModel.addElement(u.toString());
-        }
-        lstUsers.setModel(usersListModel);
+        UpdateUserListView();
     }//GEN-LAST:event_btnDeleteSelectedActionPerformed
 
     private void btnSaveListToFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveListToFileActionPerformed
@@ -573,7 +564,17 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSaveListToFileActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        
+
+        for (User u: users) {
+            if (u.getId().equals(txtId.getText())) {
+                u.setFirstName(txtFirstName.getText());
+                u.setLastName(txtLastName.getText());
+                u.setBirthDate(LocalDate.parse(txtBirthDate.getText()));
+                u.setGender(radGenderMale.isSelected() ? "Male" : "Female");
+                u.setIsAlive(chkIsAlive.isSelected());
+                UpdateUserListView();
+            }
+        }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void UpdateUserListView() {
