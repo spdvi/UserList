@@ -1,5 +1,4 @@
-
-import javax.swing.JLabel;
+package spdvi;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -10,12 +9,12 @@ import javax.swing.JLabel;
  *
  * @author DevMike
  */
-public class EncuestaDialog extends javax.swing.JDialog {
+public class ConfirmSaveDialog extends javax.swing.JDialog {
 
     /**
-     * Creates new form EncuestaDialog
+     * Creates new form ConfirmSaveDialog
      */
-    public EncuestaDialog(java.awt.Frame parent, boolean modal) {
+    public ConfirmSaveDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
@@ -29,55 +28,68 @@ public class EncuestaDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnOk = new javax.swing.JButton();
-        btnCancel = new javax.swing.JButton();
-        lblMessage = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        btnYes = new javax.swing.JButton();
+        bntNo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        btnOk.setText("Ok");
-        btnOk.addActionListener(new java.awt.event.ActionListener() {
+        jLabel1.setText("Are you sure you wan't to save the changes?");
+
+        btnYes.setText("Yes");
+        btnYes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOkActionPerformed(evt);
+                btnYesActionPerformed(evt);
             }
         });
 
-        btnCancel.setText("Cancel");
-
-        lblMessage.setText("Hola Spdvi");
+        bntNo.setText("No");
+        bntNo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bntNoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(58, 58, 58)
+                .addGap(47, 47, 47)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(51, 51, 51)
-                        .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(64, Short.MAX_VALUE))
+                        .addComponent(btnYes, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(bntNo, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addComponent(lblMessage)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(47, 47, 47)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnOk)
-                    .addComponent(btnCancel))
-                .addGap(23, 23, 23))
+                    .addComponent(btnYes)
+                    .addComponent(bntNo))
+                .addContainerGap(72, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
+    private void btnYesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnYesActionPerformed
+        MainForm mainForm = (MainForm)this.getParent();
+        mainForm.setConfirmSave(true);
         this.setVisible(false);
-    }//GEN-LAST:event_btnOkActionPerformed
+    }//GEN-LAST:event_btnYesActionPerformed
+
+    private void bntNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntNoActionPerformed
+        MainForm mainForm = (MainForm)this.getParent();
+        mainForm.setConfirmSave(false);
+        this.setVisible(false);
+    }//GEN-LAST:event_bntNoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -96,20 +108,20 @@ public class EncuestaDialog extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EncuestaDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConfirmSaveDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EncuestaDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConfirmSaveDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EncuestaDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConfirmSaveDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(EncuestaDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConfirmSaveDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                EncuestaDialog dialog = new EncuestaDialog(new javax.swing.JFrame(), true);
+                ConfirmSaveDialog dialog = new ConfirmSaveDialog(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -122,16 +134,8 @@ public class EncuestaDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCancel;
-    private javax.swing.JButton btnOk;
-    private javax.swing.JLabel lblMessage;
+    private javax.swing.JButton bntNo;
+    private javax.swing.JButton btnYes;
+    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
-
-    public JLabel getLblMessage() {
-        return lblMessage;
-    }
-
-    public void setLblMessage(JLabel lblMessage) {
-        this.lblMessage = lblMessage;
-    }
 }
