@@ -33,6 +33,7 @@ public class ConfirmSaveDialog extends javax.swing.JDialog {
         bntNo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Confirm Save");
 
         jLabel1.setText("Are you sure you wan't to save the changes?");
 
